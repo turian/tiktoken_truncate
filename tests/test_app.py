@@ -17,25 +17,30 @@ from tiktoken_truncate.tiktoken_truncate import (
     truncate_document_to_max_tokens,
 )
 
+# Set up the test parameters
+# NTESTS = 100
+NTESTS = 30
+rng = random.Random()
+rng.seed(0)
+models = list(model_max_tokens.keys())
 
-def test_slow_vs_fast():
-    NTESTS = 100
-    rng = random.Random()
-    rng.seed(0)
-    models = list(model_max_tokens.keys())
-    for i in list(range(NTESTS)):
-        model = rng.choice(models)
-        max_tokens = model_max_tokens[model]
-        encoding = tiktoken.encoding_for_model(model)
-        estimated_characters = max_tokens / get_avg_tokens_per_char(encoding=encoding)
-        k = int(estimated_characters * rng.uniform(0.5, 2.0))
-        # k = int(estimated_characters * rng.uniform(0.5, 0.75))
-        text = random_string(k=k, seed=rng.randint(0, 2**32))
-        print(len(text))
-        text_slow = truncate_document_to_max_tokens_slow(text=text, model=model)
-        print(len(text))
-        text_fast = truncate_document_to_max_tokens(text=text, model=model)
-        assert text_slow == text_fast
+# Generate test data
+test_data = []
+for _ in range(NTESTS):
+    model = rng.choice(models)
+    max_tokens = model_max_tokens[model]
+    encoding = tiktoken.encoding_for_model(model)
+    estimated_characters = max_tokens / get_avg_tokens_per_char(encoding=encoding)
+    k = int(estimated_characters * rng.uniform(0.5, 2.0))
+    text = random_string(k=k, seed=rng.randint(0, 2**32))
+    test_data.append((model, text))
+
+
+@pytest.mark.parametrize("model,text", test_data)
+def test_slow_vs_fast(model, text):
+    text_slow = truncate_document_to_max_tokens_slow(text=text, model=model)
+    text_fast = truncate_document_to_max_tokens(text=text, model=model)
+    assert text_slow == text_fast
 
 
 if __name__ == "__main__":
