@@ -1,5 +1,4 @@
 import tiktoken
-from tqdm import tqdm
 from typeguard import typechecked
 
 from tiktoken_truncate.globals import model_max_tokens
@@ -33,7 +32,7 @@ def truncate_document_to_max_tokens(text: str, model: str) -> str:
         )
         return text
 
-    for k in tqdm(range(len(text), 1, -1)):
+    for k in range(len(text), 1, -1):
         text = text[:k]  # Remove the last character
         tokens = encoding.encode(text)
         if len(tokens) <= max_tokens:

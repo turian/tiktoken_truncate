@@ -1,10 +1,7 @@
-import random
-import string
 from typing import Tuple
 
 import tiktoken
 from tiktoken import Encoding
-from tqdm import tqdm
 from typeguard import typechecked
 
 from tiktoken_truncate.globals import model_max_tokens
@@ -77,8 +74,8 @@ def truncate_document_to_max_tokens(text: str, model: str) -> str:
     low, high = find_bounds(text, encoding, max_tokens, avg_tokens_per_char)
 
     truelen = high
-    # for truelen in tqdm(range(high, low, -1)): # Maybe down to 1?
-    for truelen in tqdm(range(high, 1, -1)):  # Maybe down to 1?
+    # for truelen in range(high, low, -1): # Maybe down to 1?
+    for truelen in range(high, 1, -1):  # Maybe down to 1?
         if len(encoding.encode(text[:truelen])) <= max_tokens:
             break
 

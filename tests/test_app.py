@@ -2,7 +2,6 @@
 """Tests for `tiktoken_truncate` package."""
 # pylint: disable=redefined-outer-name
 
-import math
 import random
 
 import pytest
