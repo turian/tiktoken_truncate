@@ -50,6 +50,7 @@ mypy = { version = "^1.5.1", optional = true }
 setuptools = { version = "^68.0", optional = true }
 pkginfo = { version = "^1.9", optional = true }
 virtualenv = { version = "^20.0", optional = true }
+materialx = { version = "1.38.10", optional = true }
 #docutils = { version = "0.21.2", optional = true }
 # Needed for Python 3.8
 docutils = { version = "0.20.1", optional = true }
@@ -83,7 +84,8 @@ doc = [
     "setuptools",
     "pkginfo",
     "virtualenv",
-    "docutils"
+    "docutils",
+    "materialx",
 ]
 
 [build-system]

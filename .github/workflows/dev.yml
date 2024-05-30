@@ -100,7 +100,7 @@ jobs:
 
       - name: build documentation
         run: |
-          pip install mkdocs materialx # Explicitly install mkdocs in this step as well to ensure it's available
+          pip install mkdocs # Explicitly install mkdocs in this step as well to ensure it's available
           poetry install -E doc
           mkdocs build
           git config --global user.name Docs deploy
