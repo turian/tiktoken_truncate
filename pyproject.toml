@@ -77,7 +77,7 @@ doc = [
     "mkdocs",
     "mkdocs-include-markdown-plugin",
     "mkdocs-material",
-    "mkdocstrings[crystal,python]",
+    "mkdocstrings",
     "mkdocs-material-extensions",
     "mkdocs-autorefs",
     "mike",
