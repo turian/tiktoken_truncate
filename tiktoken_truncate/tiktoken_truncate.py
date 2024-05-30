@@ -71,7 +71,8 @@ def truncate_document_to_max_tokens(text: str, model: str) -> str:
     avg_tokens_per_char = get_avg_tokens_per_char(encoding)
 
     # Estimate initial bounds without encoding the entire text
-    low, high = find_bounds(text, encoding, max_tokens, avg_tokens_per_char)
+    # low, high = find_bounds(text, encoding, max_tokens, avg_tokens_per_char)
+    _, high = find_bounds(text, encoding, max_tokens, avg_tokens_per_char)
 
     truelen = high
     # for truelen in range(high, low, -1): # Maybe down to 1?
