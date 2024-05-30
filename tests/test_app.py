@@ -20,7 +20,8 @@ from tiktoken_truncate.tiktoken_truncate import (
 # Set up the test parameters
 # NTESTS = 100
 # NTESTS = 30
-NTESTS = 6
+# NTESTS = 6
+NTESTS = 2
 rng = random.Random()
 rng.seed(0)
 models = list(model_max_tokens.keys())

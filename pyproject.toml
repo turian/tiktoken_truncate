@@ -86,6 +86,7 @@ doc = [
     "virtualenv",
     "docutils",
     "materialx",
+    "mkdocstrings-python",  # Add mkdocstrings-python handler
 ]
 
 [build-system]
