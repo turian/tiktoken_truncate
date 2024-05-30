@@ -79,7 +79,8 @@ doc = [
     "mike",
     "setuptools",
     "pkginfo",
-    "virtualenv"
+    "virtualenv",
+    "docutils"
 ]
 
 [build-system]
