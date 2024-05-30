@@ -6,7 +6,6 @@ import random
 
 import pytest
 import tiktoken
-from tqdm import tqdm
 
 from tiktoken_truncate.globals import model_max_tokens
 from tiktoken_truncate.random_string import random_string
@@ -24,7 +23,7 @@ def test_slow_vs_fast():
     rng = random.Random()
     rng.seed(0)
     models = list(model_max_tokens.keys())
-    for i in tqdm(list(range(NTESTS))):
+    for i in list(range(NTESTS)):
         model = rng.choice(models)
         max_tokens = model_max_tokens[model]
         encoding = tiktoken.encoding_for_model(model)
