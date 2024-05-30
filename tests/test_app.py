@@ -17,27 +17,44 @@ from tiktoken_truncate.tiktoken_truncate import (
     truncate_document_to_max_tokens,
 )
 
-# Set up the test parameters
-# NTESTS = 100
-NTESTS = 30
-rng = random.Random()
-rng.seed(0)
-models = list(model_max_tokens.keys())
+# Fixed seed for deterministic tests
+FIXED_SEED = 0
 
-# Generate test data
-test_data = []
-for _ in range(NTESTS):
-    model = rng.choice(models)
-    max_tokens = model_max_tokens[model]
-    encoding = tiktoken.encoding_for_model(model)
-    estimated_characters = max_tokens / get_avg_tokens_per_char(encoding=encoding)
-    k = int(estimated_characters * rng.uniform(0.5, 2.0))
-    text = random_string(k=k, seed=rng.randint(0, 2**32))
-    test_data.append((model, text))
+N_TESTS = 30
 
 
-@pytest.mark.parametrize("model,text", test_data)
-def test_slow_vs_fast(model, text):
+def generate_test_data(seed, ntests=N_TESTS // 2):
+    rng = random.Random(seed)
+    models = list(model_max_tokens.keys())
+    test_data = []
+    for _ in range(ntests):
+        model = rng.choice(models)
+        max_tokens = model_max_tokens[model]
+        encoding = tiktoken.encoding_for_model(model)
+        estimated_characters = max_tokens / get_avg_tokens_per_char(encoding=encoding)
+        k = int(estimated_characters * rng.uniform(0.5, 2.0))
+        text = random_string(k=k, seed=rng.randint(0, 2**32))
+        test_data.append((model, text))
+    return test_data
+
+
+# Parametrize with deterministic test data
+deterministic_test_data = generate_test_data(FIXED_SEED)
+
+
+@pytest.mark.parametrize("model,text", deterministic_test_data)
+def test_slow_vs_fast_deterministic(model, text):
+    text_slow = truncate_document_to_max_tokens_slow(text=text, model=model)
+    text_fast = truncate_document_to_max_tokens(text=text, model=model)
+    assert text_slow == text_fast
+
+
+# Parametrize with random test data for broader coverage
+random_test_data = generate_test_data(random.randint(0, 2**32))
+
+
+@pytest.mark.parametrize("model,text", random_test_data)
+def test_slow_vs_fast_random(model, text):
     text_slow = truncate_document_to_max_tokens_slow(text=text, model=model)
     text_fast = truncate_document_to_max_tokens(text=text, model=model)
     assert text_slow == text_fast
